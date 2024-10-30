@@ -148,15 +148,9 @@ alias 666='chmod -R 666'
 alias 755='chmod -R 755'
 alias 777='chmod -R 777'
 
-# Search command line history
-alias h="history | grep "
-
-# Search running processes
-alias p="ps aux | grep "
-alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
-
-# Search files in the current folder
-alias f="find . | grep "
+# Powerfull tool aliases
+alias bat='batcat'
+alias f="fzf --preview='batcat --style=numbers --color=always {}'"
 
 # Count all files (recursively) in the current folder
 alias countfiles="for t in files links directories; do echo \`find . -type \${t:0:1} | wc -l\` \$t; done 2> /dev/null"
@@ -297,15 +291,10 @@ up() {
 	cd $d
 }
 
-# Automatically do an ls after each cd, z, or zoxide
-#cd ()
-#{
-	#if [ -n "$1" ]; then
-		#builtin cd "$@" && ls
-	#else
-		#builtin cd ~ && ls
-	#fi
-#}
+# RipGrep + FZF for a powerfull research
+fgrep() {
+  rg "$1" | fzf | cut -d':' -f 1 | xargs -n 1 nvim
+}
 
 # Returns the last 2 fields of the working directory
 pwdtail() {
@@ -523,11 +512,8 @@ lazyg() {
 	git push
 }
 
-export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin"
-
 # Install Starship - curl -sS https://starship.rs/install.sh | sh
 eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 
-export PATH="/home/quad/tarball/pycharm-community-2023.2.5/bin:$PATH"
-. "$HOME/.cargo/env"
+export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin:$HOME/tarball/pycharm-community-2023.2.5/bin"
