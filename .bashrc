@@ -516,4 +516,4 @@ lazyg() {
 eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 
-export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin:$HOME/tarball/pycharm-community-2023.2.5/bin"
+export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin:$HOME/tarball/pycharm-community-2023.2.5/bin:$HOME/android-studio/bin"
