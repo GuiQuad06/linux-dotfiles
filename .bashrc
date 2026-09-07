@@ -516,4 +516,7 @@ lazyg() {
 eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 
-export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin:$HOME/tarball/pycharm-community-2023.2.5/bin:$HOME/android-studio/bin"
+export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin:$HOME/tarball/pycharm-2026.2/bin:$HOME/android-studio/bin:$HOME/.config/emacs/bin"
+. "$HOME/.cargo/env"
+
+export STM32_PRG_PATH=/home/quad/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin
