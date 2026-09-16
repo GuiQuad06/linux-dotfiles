@@ -64,7 +64,9 @@
 ;;   this file. Emacs searches the `load-path' when you load packages with
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
-;;
+
+(setq confirm-kill-emacs nil)
+
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
@@ -81,6 +83,23 @@
  org-log-done 'time
  +org-capture-todo-file "tasks.org"
  )
+
+(use-package! pdf-tools
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :config
+  ;; Initialize pdf-tools
+  (pdf-tools-install :no-query)
+
+  ;; Auto-revert PDF buffers when the underlying file changes
+  (add-hook 'pdf-view-mode-hook #'pdf-sync-minor-mode)
+  (add-hook 'pdf-view-mode-hook #'(lambda () (interactive) (display-line-numbers-mode -1)))
+
+  ;; Keybindings for convenient continuous scrolling and zooming
+  (map! :map pdf-view-mode-map
+        :n "j"   #'pdf-view-next-line-or-next-page
+        :n "k"   #'pdf-view-previous-line-or-next-page
+        :n "C-=" #'pdf-view-enlarge
+        :n "C--" #'pdf-view-shrink))
 
 (use-package! org-fancy-priorities-list
   :hook (org-mode . org-fancy-priorities-mode)
