@@ -85,6 +85,33 @@
  +org-capture-todo-file "tasks.org"
  )
 
+(setq ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+
+(defun dt-ediff-hook ()
+  (ediff-setup-keymap)
+  (define-key ediff-mode-map "j" 'ediff-next-difference)
+  (define-key ediff-mode-map "k" 'ediff-previous-difference))
+
+(add-hook 'ediff-mode-hook 'dt-ediff-hook)
+
+(use-package! pdf-tools
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :config
+  ;; Initialize pdf-tools
+  (pdf-tools-install :no-query)
+
+  ;; Auto-revert PDF buffers when the underlying file changes
+  (add-hook 'pdf-view-mode-hook #'pdf-sync-minor-mode)
+  (add-hook 'pdf-view-mode-hook #'(lambda () (interactive) (display-line-numbers-mode -1)))
+
+  ;; Keybindings for convenient continuous scrolling and zooming
+  (map! :map pdf-view-mode-map
+        :n "j"   #'pdf-view-next-line-or-next-page
+        :n "k"   #'pdf-view-previous-line-or-next-page
+        :n "C-=" #'pdf-view-enlarge
+        :n "C--" #'pdf-view-shrink))
+
 (use-package! org-fancy-priorities-list
   :hook (org-mode . org-fancy-priorities-mode)
   :config
@@ -126,3 +153,6 @@
 
 (map! :ne "M-/" #'comment-or-uncomment-region)
 (map! :ne "SPC n b" #'org-brain-visualize)
+(map! :leader
+      :desc "Open Ediff"
+      "e d" #'ediff-buffers)
