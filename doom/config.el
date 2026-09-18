@@ -84,6 +84,16 @@
  +org-capture-todo-file "tasks.org"
  )
 
+(setq ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+
+(defun dt-ediff-hook ()
+  (ediff-setup-keymap)
+  (define-key ediff-mode-map "j" 'ediff-next-difference)
+  (define-key ediff-mode-map "k" 'ediff-previous-difference))
+
+(add-hook 'ediff-mode-hook 'dt-ediff-hook)
+
 (use-package! pdf-tools
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
@@ -142,3 +152,6 @@
 
 (map! :ne "M-/" #'comment-or-uncomment-region)
 (map! :ne "SPC n b" #'org-brain-visualize)
+(map! :leader
+      :desc "Open Ediff"
+      "e d" #'ediff-buffers)
