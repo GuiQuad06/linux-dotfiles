@@ -77,13 +77,14 @@
 ;; they are implemented.
 
 (setq
- ;;doom-font (font-spec :family "Fira Code" :size 16)
- doom-font (font-spec :size 16)
- default-directory "~"
- projectile-project-search-path '("~/code_heap/" "~/code_playground/" "~/code_pool/")
- org-log-done 'time
- +org-capture-todo-file "tasks.org"
- )
+  ;;doom-font (font-spec :family "Fira Code" :size 16)
+  doom-font (font-spec :size 16)
+  default-directory "~"
+  projectile-project-search-path '("~/code_heap/" "~/code_playground/" "~/code_pool/")
+  org-log-done 'time
+  ;; Not sure I'd need capture
+  ;;+org-capture-todo-file "tasks.org"
+  )
 
 (setq ediff-split-window-function 'split-window-horizontally
       ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -112,21 +113,22 @@
         :n "C-=" #'pdf-view-enlarge
         :n "C--" #'pdf-view-shrink))
 
-(use-package! org-fancy-priorities
-  :hook (org-mode . org-fancy-priorities-mode)
-  :config
-  ;; (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
-
-  (setq
-    org-fancy-priorities-list '("🔴" "🟠" "🟡")
-    org-priority-faces
-    '((?A :foreground "#ff6c6b" :weight bold)
-      (?B :foreground "#98be65" :weight bold)
-      (?C :foreground "#c678dd" :weight bold))
-    org-agenda-block-separator 8411))
+;; (use-package! org-fancy-priorities
+;;   :hook (org-mode . org-fancy-priorities-mode)
+;;   :config
+;;   ;; Alist form avoids the package's use of `org-highest-priority', removed in Org 9.8.
+;;   (setq org-fancy-priorities-list '((?A . "🔴")
+;;                                     (?B . "🟠")
+;;                                     (?C . "🟡"))))
 
 (after! org
   (require 'org-tempo)
+  (setq org-fancy-priorities-list '("🔴" "🟠" "🟡")
+        org-priority-faces
+        '((?A :foreground "#ff6c6b" :weight bold)
+          (?B :foreground "#98be65" :weight bold)
+          (?C :foreground "#c678dd" :weight bold))
+        org-agenda-block-separator 8411)
   (setq org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
         org-todo-keyword-faces
         '(("TODO" :foreground "#7c7c75" :weight "normal" :underline t)
@@ -138,25 +140,25 @@
         org-agenda-files (directory-files-recursively "~/Documents/" "\.org$")
         )
   (setq org-agenda-custom-commands
-      '(("v" "GOAT Agenda view"
-         ((tags "PRIORITY=\"A\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Higher-priority unfinished tasks:")))
-          (tags "PRIORITY=\"B\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
-          (tags "PRIORITY=\"C\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Low-priority unfinished tasks:")))
-          (tags "work"
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Work-related unfinished tasks:"))))
+        '(("v" "GOAT Agenda view"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Higher-priority unfinished tasks:")))
+            (tags "PRIORITY=\"B\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
+            (tags "PRIORITY=\"C\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Low-priority unfinished tasks:")))
+            (tags "work"
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Work-related unfinished tasks:")))
+            (agenda "" nil)
+            (alltodo "" nil))))))
 
-          (agenda "" nil )
-          (alltodos "" nil )))))
-  )
-
-
+;; Buffer-local minor mode: it must be hooked into every Org/agenda buffer.
+(add-hook 'org-mode-hook #'org-fancy-priorities-mode)
+(add-hook 'org-agenda-mode-hook #'org-fancy-priorities-mode)
 
 (use-package! org-super-agenda
   :after org-agenda
