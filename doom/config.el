@@ -111,10 +111,51 @@
         :n "C-=" #'pdf-view-enlarge
         :n "C--" #'pdf-view-shrink))
 
-(use-package! org-fancy-priorities-list
+(use-package! org-fancy-priorities
   :hook (org-mode . org-fancy-priorities-mode)
   :config
-  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+  ;; (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+
+  (setq
+    org-fancy-priorities-list '("🔴" "🟠" "🟡")
+    org-priority-faces
+    '((?A :foreground "#ff6c6b" :weight bold)
+      (?B :foreground "#98be65" :weight bold)
+      (?C :foreground "#c678dd" :weight bold))
+    org-agenda-block-separator 8411))
+
+(after! org
+  (require 'org-tempo)
+  (setq org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+        org-todo-keyword-faces
+        '(("TODO" :foreground "#7c7c75" :weight "normal" :underline t)
+          ("WAITING" :foreground "#9f7efe" :weight "normal" :underline t)
+          ("INPROGRESS" :foreground "#0098dd" :weight "normal" :underline t)
+          ("DONE" :foreground "#50a14f" :weight "normal" :underline t)
+          ("CANCELLED" :foreground "#ff6480" :weight "normal" :underline t)
+          )
+        org-agenda-files (directory-files-recursively "~/Documents/" "\.org$")
+        )
+  (setq org-agenda-custom-commands
+      '(("v" "GOAT Agenda view"
+         ((tags "PRIORITY=\"A\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Higher-priority unfinished tasks:")))
+          (tags "PRIORITY=\"B\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
+          (tags "PRIORITY=\"C\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Low-priority unfinished tasks:")))
+          (tags "work"
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Work-related unfinished tasks:"))))
+
+          (agenda "" nil )
+          (alltodos "" nil )))))
+  )
+
+
 
 (use-package! org-super-agenda
   :after org-agenda
@@ -135,19 +176,6 @@
                                   :tag "bo")))
   ;; Enable org-super-agenda mode globally
   (org-super-agenda-mode 1)
-  )
-(after! org
-  (require 'org-tempo)
-  (setq org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
-        org-todo-keyword-faces
-        '(("TODO" :foreground "#7c7c75" :weight "normal" :underline t)
-          ("WAITING" :foreground "#9f7efe" :weight "normal" :underline t)
-          ("INPROGRESS" :foreground "#0098dd" :weight "normal" :underline t)
-          ("DONE" :foreground "#50a14f" :weight "normal" :underline t)
-          ("CANCELLED" :foreground "#ff6480" :weight "normal" :underline t)
-          )
-        org-agenda-files (directory-files-recursively "~/Documents/" "\.org$")
-        )
   )
 
 (map! :ne "M-/" #'comment-or-uncomment-region)
