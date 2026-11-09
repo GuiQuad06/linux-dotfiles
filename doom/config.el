@@ -186,3 +186,7 @@
 (map! :leader
       :desc "Open Ediff"
       "e d" #'ediff-buffers)
+;; Got to definition and come back
+(map! "C-]" #'xref-find-definitions)
+(map! "C-t" #'xref-go-back)
+
