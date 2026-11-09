@@ -187,6 +187,8 @@
       :desc "Open Ediff"
       "e d" #'ediff-buffers)
 ;; Got to definition and come back
-(map! "C-]" #'xref-find-definitions)
-(map! "C-t" #'xref-go-back)
-
+(after! evil
+  (define-key evil-normal-state-map (kbd "C-]")
+              #'xref-find-definitions)
+  (define-key evil-normal-state-map (kbd "C-t")
+              #'xref-go-back))
